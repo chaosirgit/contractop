@@ -2,14 +2,14 @@ import 'package:contractop/models/Model.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-class Wallet extends Model {
+class Operator extends Model {
   @override
   final int? id;
   final String? publicKey;
   final String? secretKey;
-  static String tableName = 'wallet';
+  static String tableName = 'operator';
 
-  Wallet({this.id,this.publicKey,this.secretKey});
+  Operator({this.id,this.publicKey,this.secretKey});
 
   @override
   Map<String,Object?> toMap(){
@@ -23,7 +23,7 @@ class Wallet extends Model {
     return map;
   }
 
-  Future<Wallet> save() async {
+  Future<Operator> save() async {
     if (id == null || id as int <= 0){
       id = await Model.dbService.db.insert(tableName, toMap());
     }else{
@@ -61,17 +61,25 @@ class Wallet extends Model {
     return results;
   }
 
-  static Future<List<Map>> get({String? where, List<Object?>? whereArgs,int? limit,int? offset}) async {
+  static Future<List<Map>> get({String? where, List<Object?>? whereArgs,int? limit,int? offset,String? orderBy}) async {
     var results = <Map>[];
-    List<Map> rows = await Model.dbService.db.query(tableName,where:where,whereArgs: whereArgs,limit: limit,offset: offset);
+    List<Map> rows = await Model.dbService.db.query(tableName,where:where,whereArgs: whereArgs,limit: limit,offset: offset,orderBy: orderBy);
     if(rows.isNotEmpty){
       return rows;
     }
     return results;
   }
 
-  static Wallet fromMap(Map first) {
-    return Wallet(id: first["id"],publicKey: first["public_key"],secretKey: first["secret_key"]);
+  static Future<Map?> first({String? where, List<Object?>? whereArgs}) async {
+    List<Map> rows = await get(where: where,whereArgs: whereArgs,limit: 1,orderBy: 'id desc');
+    if(rows.isNotEmpty){
+      return rows.first;
+    }
+    return null;
+  }
+
+  static Operator fromMap(Map first) {
+    return Operator(id: first["id"],publicKey: first["public_key"],secretKey: first["secret_key"]);
   }
 
 

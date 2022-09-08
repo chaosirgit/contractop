@@ -10,7 +10,8 @@ class SelectWalletMiddleware extends GetMiddleware {
   GetPage? onPageCalled(GetPage? page) {
     // TODO: implement onPageCalled
     final storage = Get.find<StorageService>();
-    if (storage.box.read("walletId") == null) {
+    var a = storage.box.read("operatorId");
+    if ( a == null) {
       return GetPage(name: '/', page: () => IndexView());
     }
     return super.onPageCalled(page);
