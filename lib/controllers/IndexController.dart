@@ -9,12 +9,16 @@ class IndexController extends GetxController {
     final title = "Block Chain Contract Operator";
     final dbService = Get.find<DbService>();
     var operators = [].obs;
-    String? secret;
+    final secret = "".obs;
+    final name = "".obs;
 
     Future<myResponse> addOperator() async {
-        if (secret != null){
+        if (name.value == "") {
+            return myResponse.error(message: "Please set your operator name");
+        }
+        if (secret.value != ""){
             try {
-                Credentials fromHex = EthPrivateKey.fromHex(secret as String);
+                Credentials fromHex = EthPrivateKey.fromHex(secret.value);
                 var publicKey = await fromHex.extractAddress();
                 String public_key = publicKey.toString();
                 var op = await Operator.first(where:"public_key = ?",whereArgs: [public_key]);
@@ -23,7 +27,8 @@ class IndexController extends GetxController {
                 }else{
                     var data = {
                         "public_key" : public_key,
-                        "secret_key" : encrypt(secret as String)
+                        "secret_key" : encrypt(secret.value),
+                        "name" : name.value
                     };
                     await Operator.fromMap(data).save();
                 }

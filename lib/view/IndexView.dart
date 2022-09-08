@@ -4,8 +4,14 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 class IndexView extends GetView<IndexController> {
+  /// GetX Controller 加载
   @override
-  IndexController controller = Get.put(IndexController());
+  final IndexController controller = Get.put(IndexController());
+
+  //TODO
+  //提交之后改变焦点
+  //列表更新后 List 不刷新
+
   @override
   Widget build(BuildContext context) {
     controller.getOperators();
@@ -18,19 +24,32 @@ class IndexView extends GetView<IndexController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: defaultPadding),
+            /// Name 输入框
             SizedBox(
               width: 400,
               height: 50,
               child: TextField(
-                onChanged: (a) {
-                  controller.secret = a;
+                autofocus: true,
+                onSubmitted: (d) {
+                  controller.secret.value = d;
                 },
+                decoration: const InputDecoration(
+                    labelText: "Operator Name",
+                    hintText: "Input your operation alis name",
+                    prefixIcon: Icon(Icons.swipe_right_alt)),
+              ),
+            ),
+            const SizedBox(height: defaultPadding),
+            /// Secret 输入框
+            SizedBox(
+              width: 400,
+              height: 50,
+              child: TextField(
                 obscureText: true,
                 decoration: const InputDecoration(
                     labelText: "Secret Key",
                     hintText: "Input your operation wallet secret key",
-                    prefixIcon: Icon(Icons.lock)
-                ),
+                    prefixIcon: Icon(Icons.lock)),
               ),
             ),
             const SizedBox(height: defaultPadding),
@@ -42,11 +61,11 @@ class IndexView extends GetView<IndexController> {
                 label: const Text("Add Wallet"),
                 onPressed: () async {
                   var res = await controller.addOperator();
-                  if (res.code == 200){
+                  if (res.code == 200) {
                     ///添加成功 刷新列表
                     await controller.getOperators();
-                  }else{
-                    Get.snackbar("Error",res.message);
+                  } else {
+                    Get.snackbar("Error", res.message);
                   }
                 },
               ),
@@ -54,36 +73,53 @@ class IndexView extends GetView<IndexController> {
             const SizedBox(height: defaultPadding),
             Container(
               alignment: Alignment.center,
-              width: 100,
-              height: 50,
-              child: const Text("Operator List"),
-            ),
-            const SizedBox(height: defaultPadding),
-            Container(
-              color: Colors.cyanAccent,
-              width: 400,
-              height: 1,
-            ),
-            const SizedBox(height: defaultPadding),
-            Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 500,
-                  child: GetBuilder<IndexController>(
-                    builder: (ic) => ListView.builder(
-                      itemCount: ic.operators.length,
-                      itemExtent: 50,
-                      itemBuilder: (context,index) {
-                        return ListTile(title: Text("Public Address: ${ic.operators[index]["public_key"]}"),onTap: () async {
-                          var res = await ic.selectOperator(ic.operators[index]);
-                          if (res.code == 200){
-                            Get.offAllNamed('/main');
-                          }
-                        },);
-                      },
-                    ),
+              width: 700,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Operators",
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
-                ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: DataTable(
+                      columnSpacing: defaultPadding,
+                      columns: const [
+                        DataColumn(label: Text("ID")),
+                        DataColumn(label: Text("Name")),
+                        DataColumn(label: Text("Public Key")),
+                        DataColumn(label: Text("Op")),
+                      ],
+                      rows: List<DataRow>.generate(
+                          controller.operators.length,
+                          (index) => DataRow(cells: <DataCell>[
+                                DataCell(Text(
+                                    "${controller.operators[index]["id"]}")),
+                                DataCell(Text(
+                                    "${controller.operators[index]["name"]}")),
+                                DataCell(Text(
+                                    "${controller.operators[index]["public_key"]}")),
+                                DataCell(Row(
+                                  children: [
+                                    IconButton(
+                                        color: Colors.red,
+                                        onPressed: () async {
+                                           var res = await controller.selectOperator(controller.operators[index]);
+
+                                        },
+                                        icon: const Icon(Icons.delete)),
+                                    IconButton(
+                                        color: Colors.blue,
+                                        onPressed: () => controller.selectOperator(controller.operators[index]),
+                                        icon: const Icon(Icons.start))
+                                  ],
+                                )),
+                              ])),
+                    ),
+                  )
+                ],
+              ),
             ),
           ],
         ),

@@ -14,7 +14,7 @@ class DbService extends GetxService {
       onCreate: (db, version) {
         // Run the CREATE TABLE statement on the database.
         return db.execute(
-          'CREATE TABLE operator(id INTEGER PRIMARY KEY AUTOINCREMENT, public_key TEXT, secret_key TEXT)',
+          'CREATE TABLE operator(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, public_key TEXT, secret_key TEXT)',
         );
       },
       version: 2,

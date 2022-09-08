@@ -5,17 +5,19 @@ import 'dart:async';
 class Operator extends Model {
   @override
   final int? id;
+  final String? name;
   final String? publicKey;
   final String? secretKey;
   static String tableName = 'operator';
 
-  Operator({this.id,this.publicKey,this.secretKey});
+  Operator({this.id,this.publicKey,this.secretKey,this.name});
 
   @override
   Map<String,Object?> toMap(){
     Map<String,Object?> map = {
       "public_key" : publicKey,
-      "secret_key" : secretKey
+      "secret_key" : secretKey,
+      "name" : name,
     };
     if (id != null && id as int > 0){
       map["id"] = id;
@@ -79,7 +81,7 @@ class Operator extends Model {
   }
 
   static Operator fromMap(Map first) {
-    return Operator(id: first["id"],publicKey: first["public_key"],secretKey: first["secret_key"]);
+    return Operator(id: first["id"],publicKey: first["public_key"],secretKey: first["secret_key"],name: first["name"]);
   }
 
 
