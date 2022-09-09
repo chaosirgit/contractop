@@ -2,6 +2,7 @@ import 'package:contractop/models/Operator.dart';
 import 'package:contractop/service/DbService.dart';
 import 'package:contractop/service/StorageService.dart';
 import 'package:contractop/utils/helpers.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -49,11 +50,14 @@ class IndexController extends GetxController {
         update();
     }
 
-    // Future<void> selectOperator(Map map) async {
-    //     final storage = Get.find<StorageService>();
-    //     await storage.box.write("operatorId", map["id"]);
-    //     Get.toNamed("/main");
-    // }
+    Future<myResponse> deleteOperator(Map map) async {
+        var op = Operator.fromMap(map);
+        var count = await op.delete();
+        if (count > 0){
+            return myResponse.success();
+        }
+        return myResponse.error(message: "Delete fair,Please try again");
+    }
 
     Future<myResponse> selectOperator(Map map) async {
         final storage = Get.find<StorageService>();

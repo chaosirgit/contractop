@@ -13,11 +13,15 @@ class DbService extends GetxService {
       join(await getDatabasesPath(), 'contractop.db'),
       onCreate: (db, version) {
         // Run the CREATE TABLE statement on the database.
-        return db.execute(
+        db.execute(
           'CREATE TABLE operator(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, public_key TEXT, secret_key TEXT)',
         );
+        db.execute(
+          'CREATE TABLE contract(id INTEGER PRIMARY KEY AUTOINCREMENT,chain_id INTEGER, name TEXT, public_key TEXT, abi TEXT)',
+        );
+        return;
       },
-      version: 2,
+      version: 1,
     );
     return this;
   }

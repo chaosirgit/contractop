@@ -41,3 +41,16 @@ String decrypt(String text){
   var encrypted = encrypter.decryptBytes(Encrypted.fromBase64(text),iv:iv);
   return utf8.decode(encrypted);
 }
+/// 根据 ABI 解析出方法
+Map parseAbi(String abi){
+  var abiObj = jsonDecode(abi);
+  var send = abiObj.where((o) {
+    if (o['type'] == "function" && o['stateMutability'] != "view"){
+      return true;
+    }
+    return false;
+  }).toList();
+  var read = abiObj.where((e) => e['type'] == "function" && e['stateMutability'] == "view").toList();
+
+  return {"send":send,"read":read};
+}

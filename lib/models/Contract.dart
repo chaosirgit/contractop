@@ -2,22 +2,24 @@ import 'package:contractop/models/Model.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-class Operator extends Model {
+class Contract extends Model {
   @override
   final int? id;
-  final String? name;
-  final String? publicKey;
-  final String? secretKey;
-  static String tableName = 'operator';
+  final int chainId;
+  final String name;
+  final String publicKey;
+  final String abi;
+  static String tableName = 'contract';
 
-  Operator({this.id,this.publicKey,this.secretKey,this.name});
+  Contract({required this.name,required this.publicKey,required this.abi,this.id,this.chainId = 56});
 
   @override
   Map<String,Object?> toMap(){
     Map<String,Object?> map = {
       "public_key" : publicKey,
-      "secret_key" : secretKey,
+      "abi" : abi,
       "name" : name,
+      "chain_id" : chainId,
     };
     if (id != null && id as int > 0){
       map["id"] = id;
@@ -25,7 +27,7 @@ class Operator extends Model {
     return map;
   }
 
-  Future<Operator> save() async {
+  Future<Contract> save() async {
     if (id == null || id as int <= 0){
       id = await Model.dbService.db.insert(tableName, toMap());
     }else{
@@ -89,8 +91,8 @@ class Operator extends Model {
     return null;
   }
 
-  static Operator fromMap(Map first) {
-    return Operator(id: first["id"],publicKey: first["public_key"],secretKey: first["secret_key"],name: first["name"]);
+  static Contract fromMap(Map first) {
+    return Contract(id: first["id"],publicKey: first["public_key"],abi: first["abi"],name: first["name"],chainId: first["chain_id"]);
   }
 
 

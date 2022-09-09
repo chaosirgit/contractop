@@ -28,7 +28,7 @@ class App extends StatelessWidget {
         backgroundColor: bgColor,
         canvasColor: secondaryColor,
       ),
-      initialRoute: '/main',
+      initialRoute: '/contract',
       getPages: routes,
     );
   }
