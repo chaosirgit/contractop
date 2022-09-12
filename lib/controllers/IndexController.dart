@@ -1,5 +1,4 @@
 import 'package:contractop/models/Operator.dart';
-import 'package:contractop/service/DbService.dart';
 import 'package:contractop/service/StorageService.dart';
 import 'package:contractop/utils/helpers.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:web3dart/web3dart.dart';
 
 class IndexController extends GetxController {
     final title = "Block Chain Contract Operator";
-    final dbService = Get.find<DbService>();
     var operators = [].obs;
     final secret = "".obs;
     final name = "".obs;

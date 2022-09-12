@@ -18,12 +18,11 @@ class IndexView extends GetView<IndexController> {
       appBar: AppBar(
         title: Text(controller.title),
       ),
-      body: Center(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Center(
           child: Container(
             width: 800,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 /// Name 输入框
                 Padding(

@@ -23,8 +23,14 @@ class MainController extends GetxController {
     var cId = await storage.box.read("contractId");
     var c = await Contract.find(cId);
     var p = parseAbi(c["abi"] as String);
-    sendMethods.value = p["send"];
-    readMethods.value = p["read"];
+    sendMethods.value = p["send"].map((i) {
+      i['input_format'] = i['inputs'].map((u) => u['name']).toList().join(",");
+      return i;
+    }).toList();
+    readMethods.value = p["read"].map((i) {
+      i['input_format'] = i['inputs'].map((u) => u['name']).toList().join(",");
+      return i;
+    }).toList();
     update();
   }
 

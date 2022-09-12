@@ -27,16 +27,82 @@ class MainView extends GetView<MainController> {
         child: Row(
           children: [
             Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.all(defaultPadding),
-                  itemCount: mc.readMethods.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(title: Text("${mc.readMethods[index]}"),);
-                  },
-                )
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: Text(
+
+                      "Read Methods",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  /// 读方法列表
+                  Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: SizedBox(
+                      height: 400,
+                      child: GetBuilder<MainController>(
+                        builder: (_) {
+                          return ListView.builder(
+                            padding: const EdgeInsets.all(defaultPadding),
+                            itemCount: mc.readMethods.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(
+                                leading: const Icon(Icons.read_more,color: Colors.blueAccent,),
+                                title: Text("${mc.readMethods[index]['name']}"),
+                                subtitle: Text("(${mc.readMethods[index]['input_format']})"),
+                                onTap: () {
+                                  Get.toNamed("/operation",arguments: {"methodName":mc.readMethods[index]['name'],"color":Colors.blueAccent});
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Expanded(child: Text("2")),
+            Expanded(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: Text(
+                      "Write Methods",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  /// 写方法列表
+                  Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: SizedBox(
+                      height: 400,
+                      child: GetBuilder<MainController>(
+                        builder: (_) {
+                          return ListView.builder(
+                            padding: const EdgeInsets.all(defaultPadding),
+                            itemCount: mc.sendMethods.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(
+                                leading: const Icon(Icons.edit_calendar_outlined,color: Colors.orangeAccent,),
+                                title: Text("${mc.sendMethods[index]['name']}"),
+                                subtitle: Text("(${mc.sendMethods[index]['input_format']})"),
+                                onTap: () {
+                                  Get.toNamed("/operation",arguments: {"methodName":mc.sendMethods[index]['name'],"color":Colors.orangeAccent});
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       )),
