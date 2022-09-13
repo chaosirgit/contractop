@@ -30,7 +30,7 @@ class OperationController extends GetxController with StateMixin {
   late EtherAmount balance;
   final balanceStr = "getting...".obs;
 
-  void init() async {
+  Future<void> init() async {
     /// 准备数据
     var opId = await storage.box.read("operatorId");
     var cId = await storage.box.read("contractId");
@@ -85,14 +85,14 @@ class OperationController extends GetxController with StateMixin {
     update();
   }
 
-  void getBalance() async {
+  Future<void> getBalance() async {
     ///获取余额
     balanceStr.value = "getting...";
     balance = await ethereumClient.getBalance(credentials.address);
     balanceStr.value = balance.getValueInUnit(EtherUnit.ether).toString();
   }
 
-  void getTitle() async {
+  Future<void> getTitle() async {
     title.value =
         "Hi ${op['name']}, you operating (${c['name']}).$methodName now!";
   }

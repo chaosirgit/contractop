@@ -122,7 +122,7 @@ class IndexView extends GetView<IndexController> {
                                 columns: const [
                                   DataColumn(label: Text("ID")),
                                   DataColumn(label: Text("Name")),
-                                  DataColumn(label: Text("Public Key")),
+                                  DataColumn(label: Text("Wallet Address")),
                                   DataColumn(label: Text("Op")),
                                 ],
                                 rows: List<DataRow>.generate(

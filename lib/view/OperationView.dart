@@ -9,12 +9,11 @@ class OperationView extends GetView<OperationController> {
   final OperationController oc = Get.put(OperationController());
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
     // TODO: implement build
-    oc.init();
+    oc.init().then((value) => oc.getTitle());
 
     /// 获取 title
-    oc.getTitle();
 
     return Scaffold(
       appBar: AppBar(

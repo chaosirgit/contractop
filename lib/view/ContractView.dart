@@ -176,7 +176,7 @@ class ContractView extends GetView<ContractController> {
                                   DataColumn(label: Text("ID")),
                                   DataColumn(label: Text("Name")),
                                   DataColumn(label: Text("Chain ID")),
-                                  DataColumn(label: Text("Public Key")),
+                                  DataColumn(label: Text("Contract Address")),
                                   DataColumn(label: Text("Op")),
                                 ],
                                 rows: List<DataRow>.generate(
