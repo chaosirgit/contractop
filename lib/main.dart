@@ -28,6 +28,7 @@ class App extends StatelessWidget {
         backgroundColor: bgColor,
         canvasColor: secondaryColor,
       ),
+      debugShowCheckedModeBanner: false,
       initialRoute: '/contract',
       getPages: routes,
     );
