@@ -1,5 +1,6 @@
 import 'package:contractop/controllers/IndexController.dart';
 import 'package:contractop/utils/constants.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -79,6 +80,7 @@ class IndexView extends GetView<IndexController> {
                     ),
                   ),
                 ),
+
                 /// 添加按钮
                 Padding(
                   padding: const EdgeInsets.all(defaultPadding),
@@ -98,6 +100,7 @@ class IndexView extends GetView<IndexController> {
                     ),
                   ),
                 ),
+
                 /// 列表
                 Padding(
                   padding: const EdgeInsets.all(defaultPadding),
@@ -112,57 +115,72 @@ class IndexView extends GetView<IndexController> {
                         width: double.infinity,
                         child: GetBuilder<IndexController>(
                           builder: (_) {
-                            return DataTable(
-                              columnSpacing: defaultPadding,
-                              columns: const [
-                                DataColumn(label: Text("ID")),
-                                DataColumn(label: Text("Name")),
-                                DataColumn(label: Text("Public Key")),
-                                DataColumn(label: Text("Op")),
-                              ],
-                              rows: List<DataRow>.generate(
-                                  controller.operators.length,
-                                  (index) => DataRow(cells: <DataCell>[
-                                        DataCell(Text(
-                                            "${controller.operators[index]["id"]}")),
-                                        DataCell(Text(
-                                            "${controller.operators[index]["name"]}")),
-                                        DataCell(Text(
-                                            "${controller.operators[index]["public_key"]}")),
-                                        DataCell(Row(
-                                          children: [
-                                            IconButton(
-                                                color: Colors.red,
-                                                onPressed: () async {
-                                                  var res = await controller
-                                                      .deleteOperator(controller
-                                                          .operators[index]);
-                                                  if (res.code == 200) {
-                                                    ///删除成功 刷新列表
-                                                    await controller.getOperators();
-                                                  } else {
-                                                    Get.snackbar(
-                                                        "Error", res.message);
-                                                  }
-                                                },
-                                                icon: const Icon(Icons.delete)),
-                                            IconButton(
-                                                color: Colors.blue,
-                                                onPressed: () async {
-                                                  var res = await controller
-                                                      .selectOperator(controller
-                                                          .operators[index]);
-                                                  if (res.code == 200) {
-                                                    Get.offAllNamed("/contract");
-                                                  } else {
-                                                    Get.snackbar(
-                                                        "Error", res.message);
-                                                  }
-                                                },
-                                                icon: const Icon(Icons.start))
-                                          ],
-                                        )),
-                                      ])),
+                            return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                columnSpacing: defaultPadding,
+                                columns: const [
+                                  DataColumn(label: Text("ID")),
+                                  DataColumn(label: Text("Name")),
+                                  DataColumn(label: Text("Public Key")),
+                                  DataColumn(label: Text("Op")),
+                                ],
+                                rows: List<DataRow>.generate(
+                                    controller.operators.length,
+                                    (index) => DataRow(cells: <DataCell>[
+                                          DataCell(Text(
+                                              "${controller.operators[index]["id"]}")),
+                                          DataCell(Text(
+                                              "${controller.operators[index]["name"]}")),
+                                          DataCell(
+                                              Text(
+                                                  "${controller.operators[index]["public_key"]}"),
+                                              onTap: () => Clipboard.setData(
+                                                  ClipboardData(
+                                                      text:
+                                                          "${controller.operators[index]["public_key"]}"))),
+                                          DataCell(Row(
+                                            children: [
+                                              IconButton(
+                                                  color: Colors.red,
+                                                  onPressed: () async {
+                                                    var res = await controller
+                                                        .deleteOperator(
+                                                            controller
+                                                                    .operators[
+                                                                index]);
+                                                    if (res.code == 200) {
+                                                      ///删除成功 刷新列表
+                                                      await controller
+                                                          .getOperators();
+                                                    } else {
+                                                      Get.snackbar(
+                                                          "Error", res.message);
+                                                    }
+                                                  },
+                                                  icon:
+                                                      const Icon(Icons.delete)),
+                                              IconButton(
+                                                  color: Colors.blue,
+                                                  onPressed: () async {
+                                                    var res = await controller
+                                                        .selectOperator(
+                                                            controller
+                                                                    .operators[
+                                                                index]);
+                                                    if (res.code == 200) {
+                                                      Get.offAllNamed(
+                                                          "/contract");
+                                                    } else {
+                                                      Get.snackbar(
+                                                          "Error", res.message);
+                                                    }
+                                                  },
+                                                  icon: const Icon(Icons.start))
+                                            ],
+                                          )),
+                                        ])),
+                              ),
                             );
                           },
                         ),

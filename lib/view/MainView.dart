@@ -41,7 +41,7 @@ class MainView extends GetView<MainController> {
                   Padding(
                     padding: const EdgeInsets.all(defaultPadding),
                     child: SizedBox(
-                      height: 400,
+                      height: 600,
                       child: GetBuilder<MainController>(
                         builder: (_) {
                           return ListView.builder(
@@ -79,7 +79,7 @@ class MainView extends GetView<MainController> {
                   Padding(
                     padding: const EdgeInsets.all(defaultPadding),
                     child: SizedBox(
-                      height: 400,
+                      height: 600,
                       child: GetBuilder<MainController>(
                         builder: (_) {
                           return ListView.builder(

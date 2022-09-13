@@ -1,5 +1,6 @@
 import 'package:contractop/controllers/OperationController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:contractop/utils/constants.dart';
 import 'package:get/get_navigation/src/dialog/dialog_route.dart';
@@ -10,6 +11,7 @@ class OperationView extends GetView<OperationController> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    oc.init();
 
     /// 获取 title
     oc.getTitle();
@@ -17,6 +19,14 @@ class OperationView extends GetView<OperationController> {
     return Scaffold(
       appBar: AppBar(
         title: Obx(() => Text("${oc.title}")),
+        actions: [
+          Obx(() => ElevatedButton.icon(
+              onPressed: () {
+                oc.getBalance();
+              },
+              icon: Icon(Icons.currency_bitcoin),
+              label: Text("${oc.balanceStr}")))
+        ],
       ),
       floatingActionButton: IconButton(
         onPressed: () => Get.offAllNamed("/"),
@@ -55,12 +65,29 @@ class OperationView extends GetView<OperationController> {
                                 title: const Text("OK"),
                                 subtitle: Text("${res.data}"),
                               ),
+                              Padding(
+                                padding: const EdgeInsets.all(defaultPadding),
+                                child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      Clipboard.setData(
+                                          ClipboardData(text: "${res.data}"));
+                                      Get.back();
+                                    },
+                                    icon: const Icon(Icons.copy),
+                                    label: const Text("Copy Result")),
+                              )
                             ],
                           ));
                         } else {
+                          print(res.message);
                           return await Get.dialog(AlertDialog(
                             title: const Text("Error"),
                             content: Text(res.message),
+                            actions: [
+                              IconButton(
+                                  onPressed: () => Get.back(),
+                                  icon: Icon(Icons.close))
+                            ],
                           ));
                         }
                       },
@@ -76,7 +103,6 @@ class OperationView extends GetView<OperationController> {
                   List<FocusNode> nods = [];
                   for (var i = 0; i < oc.params.length; i++) {
                     nods.add(FocusNode());
-                    oc.data.add({"type": oc.params[i]['type'], "value": ""});
                   }
 
                   /// 列表
@@ -84,6 +110,7 @@ class OperationView extends GetView<OperationController> {
                     String paramsName = oc.params[i]['name'];
                     list.add(TextField(
                       focusNode: nods[i],
+                      controller: oc.editControllers[i],
 
                       /// 提交后切换焦点
                       onSubmitted: (d) {
@@ -91,12 +118,6 @@ class OperationView extends GetView<OperationController> {
                         if (i < oc.params.length - 1) {
                           FocusScope.of(context).requestFocus(nods[i + 1]);
                         }
-                      },
-
-                      /// change 赋值
-                      onChanged: (d) {
-                        oc.data.value[i]['value'] = d;
-                        print(oc.data.value);
                       },
 
                       decoration: InputDecoration(
@@ -110,9 +131,7 @@ class OperationView extends GetView<OperationController> {
                   if (oc.payable.value == true) {
                     list.add(TextField(
                       /// change 赋值
-                      onChanged: (d) {
-                        oc.payValue.value = d;
-                      },
+                      controller: oc.payValueEditController,
 
                       decoration: const InputDecoration(
                           labelText: 'coin',
