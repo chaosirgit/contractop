@@ -112,51 +112,37 @@ class OperationController extends GetxController with StateMixin {
       var p = [];
 
       for (var j = 0; j < editControllers.length; j++) {
-        if (params[j]['type'] == "uint256") {
-          p.add(BigInt.parse(editControllers[j].text));
-        } else if (params[j]['type'] == "address") {
-          var hex = editControllers[j].text as String;
-          p.add(EthereumAddress.fromHex(
-              hex.trim().replaceAll("'", '').replaceAll("\"", '')));
-        } else if (params[j]['type'] == "bool") {
-          if (editControllers[j].text == "true") {
-            p.add(true);
-          } else if (editControllers[j].text == "false") {
-            p.add(false);
-          } else {
-            p.add(false);
+        var type = params[j]['type'] as String;
+        var typeArr = type.split("[");
+        /// 非数组类型
+        if (typeArr.length == 1){
+           if (typeArr[0].startsWith("uint")){
+             p.add(BigInt.parse(editControllers[j].text));
+           }else if (typeArr[0].startsWith("bool")){
+             p.add(editControllers[j].text == "true");
+           }else if (typeArr[0].startsWith("address")){
+             var hex = editControllers[j].text as String;
+             p.add(EthereumAddress.fromHex(hex.trim().replaceAll("'", '').replaceAll("\"", '')));
+           }else if (typeArr[0].startsWith("string")){
+             p.add(editControllers[j].text);
+           }else{
+             p.add(editControllers[j].text);
+           }
+        /// 数组类型
+        }else if (typeArr.length == 2){
+          var str = editControllers[j].text as String;
+          var jde = str.trim().replaceAll("[", "").replaceAll("]", "").replaceAll("'", "").replaceAll("\"", "").split(",");
+          if (typeArr[0].startsWith("uint")){
+            p.add(jde.map((e) => BigInt.parse(e)).toList());
+          }else if (typeArr[0].startsWith("bool")){
+            p.add(jde.map((e) => e == "true").toList());
+          }else if (typeArr[0].startsWith("address")){
+            p.add(jde.map((e) => EthereumAddress.fromHex(e.trim())).toList());
+          }else if (typeArr[0].startsWith("string")){
+            p.add(jde.map((e) => e).toList());
+          }else{
+            p.add(jde.map((e) => e).toList());
           }
-        } else if (params[j]['type'] == "string") {
-          p.add(editControllers[j].text);
-        } else if (params[j]['type'] == "uint8") {
-          p.add(BigInt.parse(editControllers[j].text));
-        } else if (params[j]['type'] == "uint16") {
-          p.add(BigInt.parse(editControllers[j].text));
-        } else if (params[j]['type'] == "uint256[]") {
-          var str = editControllers[j].text as String;
-          var jde = str.replaceAll("[", "").replaceAll("]", "").split(",");
-          p.add(jde.map((e) => BigInt.parse(e)).toList());
-        } else if (params[j]['type'] == "string[]") {
-          var str = editControllers[j].text as String;
-          var jde = str.replaceAll("[", "").replaceAll("]", "").split(",");
-          p.add(jde.map((e) => e).toList());
-        } else if (params[j]['type'] == "address[]") {
-          var str = editControllers[j].text as String;
-          var jde = str.replaceAll("[", "").replaceAll("]", "").split(",");
-          p.add(jde
-              .map((e) => EthereumAddress.fromHex(
-                  e.trim().replaceAll("'", "").replaceAll("\"", "")))
-              .toList());
-        } else if (params[j]['type'] == "uint8[]") {
-          var str = editControllers[j].text as String;
-          var jde = str.replaceAll("[", "").replaceAll("]", "").split(",");
-          p.add(jde.map((e) => BigInt.parse(e)).toList());
-        } else if (params[j]['type'] == "uint16[]") {
-          var str = editControllers[j].text as String;
-          var jde = str.replaceAll("[", "").replaceAll("]", "").split(",");
-          p.add(jde.map((e) => BigInt.parse(e)).toList());
-        } else {
-          p.add(editControllers[j].text);
         }
       }
 

@@ -23,7 +23,7 @@ class MainView extends GetView<MainController> {
       ),
       body: Center(
           child: Container(
-        width: 800,
+        width: 1400,
         child: Row(
           children: [
             Expanded(

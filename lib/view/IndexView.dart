@@ -22,7 +22,7 @@ class IndexView extends GetView<IndexController> {
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            width: 800,
+            width: 1400,
             child: Column(
               children: [
                 /// Name 输入框
@@ -102,91 +102,91 @@ class IndexView extends GetView<IndexController> {
                 ),
 
                 /// 列表
-                Padding(
-                  padding: const EdgeInsets.all(defaultPadding),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      child: Text(
                         "Operators",
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: GetBuilder<IndexController>(
-                          builder: (_) {
-                            return SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: DataTable(
-                                columnSpacing: defaultPadding,
-                                columns: const [
-                                  DataColumn(label: Text("ID")),
-                                  DataColumn(label: Text("Name")),
-                                  DataColumn(label: Text("Wallet Address")),
-                                  DataColumn(label: Text("Op")),
-                                ],
-                                rows: List<DataRow>.generate(
-                                    controller.operators.length,
-                                    (index) => DataRow(cells: <DataCell>[
-                                          DataCell(Text(
-                                              "${controller.operators[index]["id"]}")),
-                                          DataCell(Text(
-                                              "${controller.operators[index]["name"]}")),
-                                          DataCell(
-                                              Text(
-                                                  "${controller.operators[index]["public_key"]}"),
-                                              onTap: () => Clipboard.setData(
-                                                  ClipboardData(
-                                                      text:
-                                                          "${controller.operators[index]["public_key"]}"))),
-                                          DataCell(Row(
-                                            children: [
-                                              IconButton(
-                                                  color: Colors.red,
-                                                  onPressed: () async {
-                                                    var res = await controller
-                                                        .deleteOperator(
-                                                            controller
-                                                                    .operators[
-                                                                index]);
-                                                    if (res.code == 200) {
-                                                      ///删除成功 刷新列表
-                                                      await controller
-                                                          .getOperators();
-                                                    } else {
-                                                      Get.snackbar(
-                                                          "Error", res.message);
-                                                    }
-                                                  },
-                                                  icon:
-                                                      const Icon(Icons.delete)),
-                                              IconButton(
-                                                  color: Colors.blue,
-                                                  onPressed: () async {
-                                                    var res = await controller
-                                                        .selectOperator(
-                                                            controller
-                                                                    .operators[
-                                                                index]);
-                                                    if (res.code == 200) {
-                                                      Get.offAllNamed(
-                                                          "/contract");
-                                                    } else {
-                                                      Get.snackbar(
-                                                          "Error", res.message);
-                                                    }
-                                                  },
-                                                  icon: const Icon(Icons.start))
-                                            ],
-                                          )),
-                                        ])),
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      child: GetBuilder<IndexController>(
+                        builder: (_) {
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                              columnSpacing: defaultPadding,
+                              columns: const [
+                                DataColumn(label: Text("ID")),
+                                DataColumn(label: Text("Name")),
+                                DataColumn(label: Text("Wallet Address")),
+                                DataColumn(label: Text("Op")),
+                              ],
+                              rows: List<DataRow>.generate(
+                                  controller.operators.length,
+                                  (index) => DataRow(cells: <DataCell>[
+                                        DataCell(Text(
+                                            "${controller.operators[index]["id"]}")),
+                                        DataCell(Text(
+                                            "${controller.operators[index]["name"]}")),
+                                        DataCell(
+                                            Text(
+                                                "${controller.operators[index]["public_key"]}"),
+                                            onTap: () => Clipboard.setData(
+                                                ClipboardData(
+                                                    text:
+                                                        "${controller.operators[index]["public_key"]}"))),
+                                        DataCell(Row(
+                                          children: [
+                                            IconButton(
+                                                color: Colors.red,
+                                                onPressed: () async {
+                                                  var res = await controller
+                                                      .deleteOperator(
+                                                          controller
+                                                                  .operators[
+                                                              index]);
+                                                  if (res.code == 200) {
+                                                    ///删除成功 刷新列表
+                                                    await controller
+                                                        .getOperators();
+                                                  } else {
+                                                    Get.snackbar(
+                                                        "Error", res.message);
+                                                  }
+                                                },
+                                                icon:
+                                                    const Icon(Icons.delete)),
+                                            IconButton(
+                                                color: Colors.blue,
+                                                onPressed: () async {
+                                                  var res = await controller
+                                                      .selectOperator(
+                                                          controller
+                                                                  .operators[
+                                                              index]);
+                                                  if (res.code == 200) {
+                                                    Get.offAllNamed(
+                                                        "/contract");
+                                                  } else {
+                                                    Get.snackbar(
+                                                        "Error", res.message);
+                                                  }
+                                                },
+                                                icon: const Icon(Icons.start))
+                                          ],
+                                        )),
+                                      ])),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  ],
                 ),
               ],
             ),

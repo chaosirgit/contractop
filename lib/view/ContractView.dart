@@ -32,7 +32,7 @@ class ContractView extends GetView<ContractController> {
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            width: 800,
+            width: 1400,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -155,101 +155,101 @@ class ContractView extends GetView<ContractController> {
                 ),
 
                 /// 列表
-                Padding(
-                  padding: const EdgeInsets.all(defaultPadding),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      child: Text(
                         "Contracts",
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: GetBuilder<ContractController>(
-                          builder: (_) {
-                            return SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: DataTable(
-                                columnSpacing: defaultPadding,
-                                columns: const [
-                                  DataColumn(label: Text("ID")),
-                                  DataColumn(label: Text("Name")),
-                                  DataColumn(label: Text("Chain ID")),
-                                  DataColumn(label: Text("Contract Address")),
-                                  DataColumn(label: Text("Op")),
-                                ],
-                                rows: List<DataRow>.generate(
-                                    cc.contracts.length,
-                                    (index) => DataRow(cells: <DataCell>[
-                                          DataCell(Text(
-                                              "${cc.contracts[index]["id"]}")),
-                                          DataCell(Text(
-                                              "${cc.contracts[index]["name"]}")),
-                                          DataCell(Text(
-                                              "${cc.contracts[index]["chain_id"]}")),
-                                          DataCell(
-                                              Text(
-                                                  "${cc.contracts[index]["public_key"]}"),
-                                              onTap: () => Clipboard.setData(
-                                                  ClipboardData(
-                                                      text:
-                                                          "${cc.contracts[index]["public_key"]}"))),
-                                          DataCell(Row(
-                                            children: [
-                                              IconButton(
-                                                  color: Colors.red,
-                                                  onPressed: () async {
-                                                    var res = await cc
-                                                        .deleteContract(cc
-                                                            .contracts[index]);
-                                                    if (res.code == 200) {
-                                                      ///删除成功 刷新列表
-                                                      await cc.getContracts();
-                                                    } else {
-                                                      Get.snackbar(
-                                                          "Error", res.message);
-                                                    }
-                                                  },
-                                                  icon:
-                                                      const Icon(Icons.delete)),
-                                              IconButton(
-                                                color: Colors.orangeAccent,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      child: GetBuilder<ContractController>(
+                        builder: (_) {
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                              columnSpacing: defaultPadding,
+                              columns: const [
+                                DataColumn(label: Text("ID")),
+                                DataColumn(label: Text("Name")),
+                                DataColumn(label: Text("Chain ID")),
+                                DataColumn(label: Text("Contract Address")),
+                                DataColumn(label: Text("Op")),
+                              ],
+                              rows: List<DataRow>.generate(
+                                  cc.contracts.length,
+                                  (index) => DataRow(cells: <DataCell>[
+                                        DataCell(Text(
+                                            "${cc.contracts[index]["id"]}")),
+                                        DataCell(Text(
+                                            "${cc.contracts[index]["name"]}")),
+                                        DataCell(Text(
+                                            "${cc.contracts[index]["chain_id"]}")),
+                                        DataCell(
+                                            Text(
+                                                "${cc.contracts[index]["public_key"]}"),
+                                            onTap: () => Clipboard.setData(
+                                                ClipboardData(
+                                                    text:
+                                                        "${cc.contracts[index]["public_key"]}"))),
+                                        DataCell(Row(
+                                          children: [
+                                            IconButton(
+                                                color: Colors.red,
                                                 onPressed: () async {
-                                                  ///点击编辑
-                                                  cc.abiTextEditController.value.text = cc.contracts[index]['abi'];
-                                                  cc.nameTextEditController.value.text = cc.contracts[index]['name'];
-                                                  cc.publicKeyTextEditController.value.text = cc.contracts[index]['public_key'];
-                                                  cc.chainIdTextEditController.value.text = cc.contracts[index]['chain_id'].toString();
-                                                  cc.id.value = cc.contracts[index]['id'];
+                                                  var res = await cc
+                                                      .deleteContract(cc
+                                                          .contracts[index]);
+                                                  if (res.code == 200) {
+                                                    ///删除成功 刷新列表
+                                                    await cc.getContracts();
+                                                  } else {
+                                                    Get.snackbar(
+                                                        "Error", res.message);
+                                                  }
                                                 },
-                                                icon: const Icon(Icons.edit),
-                                              ),
-                                              IconButton(
-                                                  color: Colors.blue,
-                                                  onPressed: () async {
-                                                    var res = await cc
-                                                        .selectContract(cc
-                                                            .contracts[index]);
-                                                    if (res.code == 200) {
-                                                      Get.toNamed("/main");
-                                                    } else {
-                                                      Get.snackbar(
-                                                          "Error", res.message);
-                                                    }
-                                                  },
-                                                  icon:
-                                                      const Icon(Icons.start)),
-                                            ],
-                                          )),
-                                        ])),
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                    ],
-                  ),
+                                                icon:
+                                                    const Icon(Icons.delete)),
+                                            IconButton(
+                                              color: Colors.orangeAccent,
+                                              onPressed: () async {
+                                                ///点击编辑
+                                                cc.abiTextEditController.value.text = cc.contracts[index]['abi'];
+                                                cc.nameTextEditController.value.text = cc.contracts[index]['name'];
+                                                cc.publicKeyTextEditController.value.text = cc.contracts[index]['public_key'];
+                                                cc.chainIdTextEditController.value.text = cc.contracts[index]['chain_id'].toString();
+                                                cc.id.value = cc.contracts[index]['id'];
+                                              },
+                                              icon: const Icon(Icons.edit),
+                                            ),
+                                            IconButton(
+                                                color: Colors.blue,
+                                                onPressed: () async {
+                                                  var res = await cc
+                                                      .selectContract(cc
+                                                          .contracts[index]);
+                                                  if (res.code == 200) {
+                                                    Get.toNamed("/main");
+                                                  } else {
+                                                    Get.snackbar(
+                                                        "Error", res.message);
+                                                  }
+                                                },
+                                                icon:
+                                                    const Icon(Icons.start)),
+                                          ],
+                                        )),
+                                      ])),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  ],
                 ),
               ],
             ),

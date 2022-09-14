@@ -33,7 +33,7 @@ class OperationView extends GetView<OperationController> {
       ),
       body: Center(
         child: Container(
-          width: 800,
+          width: 1400,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
