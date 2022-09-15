@@ -53,6 +53,8 @@ class OperationView extends GetView<OperationController> {
                       onPressed: () async {
                         var res = await oc.requestBlockChain();
                         if (res.code == 200) {
+                          String str = res.data as String;
+                          var formatStr = str.substring(1, str.length - 1);
                           return await Get.dialog(SimpleDialog(
                             title: Text("${oc.methodName}"),
                             titlePadding: const EdgeInsets.all(defaultPadding),
@@ -62,14 +64,14 @@ class OperationView extends GetView<OperationController> {
                             children: [
                               ListTile(
                                 title: const Text("OK"),
-                                subtitle: Text("${res.data}"),
+                                subtitle: Text("$formatStr"),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(defaultPadding),
                                 child: ElevatedButton.icon(
                                     onPressed: () {
                                       Clipboard.setData(
-                                          ClipboardData(text: "${res.data}"));
+                                          ClipboardData(text: "$formatStr"));
                                       Get.back();
                                     },
                                     icon: const Icon(Icons.copy),
