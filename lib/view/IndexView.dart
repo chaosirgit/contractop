@@ -146,10 +146,8 @@ class IndexView extends GetView<IndexController> {
                                                 color: Colors.red,
                                                 onPressed: () async {
                                                   var res = await controller
-                                                      .deleteOperator(
-                                                          controller
-                                                                  .operators[
-                                                              index]);
+                                                      .deleteOperator(controller
+                                                          .operators[index]);
                                                   if (res.code == 200) {
                                                     ///删除成功 刷新列表
                                                     await controller
@@ -159,16 +157,13 @@ class IndexView extends GetView<IndexController> {
                                                         "Error", res.message);
                                                   }
                                                 },
-                                                icon:
-                                                    const Icon(Icons.delete)),
+                                                icon: const Icon(Icons.delete)),
                                             IconButton(
                                                 color: Colors.blue,
                                                 onPressed: () async {
                                                   var res = await controller
-                                                      .selectOperator(
-                                                          controller
-                                                                  .operators[
-                                                              index]);
+                                                      .selectOperator(controller
+                                                          .operators[index]);
                                                   if (res.code == 200) {
                                                     Get.offAllNamed(
                                                         "/contract");

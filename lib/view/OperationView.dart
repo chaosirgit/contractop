@@ -80,7 +80,6 @@ class OperationView extends GetView<OperationController> {
                             ],
                           ));
                         } else {
-                          print(res.message);
                           return await Get.dialog(AlertDialog(
                             title: const Text("Error"),
                             content: Text(res.message),
@@ -119,6 +118,11 @@ class OperationView extends GetView<OperationController> {
                         if (i < oc.params.length - 1) {
                           FocusScope.of(context).requestFocus(nods[i + 1]);
                         }
+                      },
+
+                      /// 保存草稿
+                      onChanged: (d) {
+                        oc.setDraft(oc.methodName,i,d);
                       },
 
                       decoration: InputDecoration(

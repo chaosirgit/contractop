@@ -29,11 +29,12 @@ class OperationController extends GetxController with StateMixin {
   late EthPrivateKey credentials;
   late EtherAmount balance;
   final balanceStr = "getting...".obs;
+  late int cId;
 
   Future<void> init() async {
     /// 准备数据
     var opId = await storage.box.read("operatorId");
-    var cId = await storage.box.read("contractId");
+    cId = await storage.box.read("contractId");
     op = await Operator.find(opId);
     c = await Contract.find(cId);
 
@@ -81,8 +82,29 @@ class OperationController extends GetxController with StateMixin {
     for (var i = 0; i < params.length; i++) {
       editControllers.add(TextEditingController());
     }
+    /// 获取草稿
+    var draft = await storage.box.read("draft.$cId.$methodName");
+    if (draft != null) {
+      for (var j = 0; j < params.length; j++) {
+        editControllers[j].text = draft[j];
+      }
+    }
+
     getBalance();
     update();
+  }
+
+  //设置草稿
+  Future<void> setDraft(methodName,index,data) async {
+      var draftData = await storage.box.read("draft.$cId.$methodName");
+      if (draftData == null) {
+        draftData = [];
+        for (var i = 0; i < params.length; i++) {
+          draftData.add("");
+        }
+      }
+      draftData[index] = data;
+      storage.box.write("draft.$cId.$methodName",draftData);
   }
 
   Future<void> getBalance() async {
