@@ -54,7 +54,7 @@ class OperationView extends GetView<OperationController> {
                         var res = await oc.requestBlockChain();
                         if (res.code == 200) {
                           String str = res.data as String;
-                          var formatStr = str.substring(1, str.length - 1);
+                          var formatStr = oc.select['stateMutability'] == "view" ? str.substring(1, str.length - 1) : str;
                           return await Get.dialog(SimpleDialog(
                             title: Text("${oc.methodName}"),
                             titlePadding: const EdgeInsets.all(defaultPadding),
