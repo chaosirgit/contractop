@@ -51,7 +51,7 @@ class OperationController extends GetxController with StateMixin {
     } else if (c['chain_id'] == 1) {
       rpc = "https://cloudflare-eth.com";
     } else if (c['chain_id'] == 5) {
-      rpc = 'https://goerli.infura.io/v3/';
+      rpc = 'https://rpc.ankr.com/eth_goerli';
     }
     httpClient = Client();
     ethereumClient = Web3Client(rpc, httpClient);
