@@ -39,9 +39,6 @@ class ContractController extends GetxController {
     }
     try {
       var cid = int.parse(chainIdTextEditController.value.text);
-      if (cid != 56 && cid != 97 && cid != 1){
-        return myResponse.error(message: "ChainID Error");
-      }
       var abiObj = jsonDecode(abiTextEditController.value.text);
       var ct = await Contract.first(
           where: "public_key = ?", whereArgs: [publicKeyTextEditController.value.text]);
@@ -108,9 +105,6 @@ class ContractController extends GetxController {
         return myResponse.error(message: "This contract not found");
       }
       var cid = int.parse(chainIdTextEditController.value.text);
-      if (cid != 56 && cid != 97 && cid != 1){
-        return myResponse.error(message: "ChainID Error");
-      }
       var abiObj = jsonDecode(abiTextEditController.value.text);
       var ct = await Contract.first(
           where: "id = ?", whereArgs: [id.value]);

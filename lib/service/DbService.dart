@@ -23,7 +23,14 @@ class DbService extends GetxService {
         );
         return;
       },
-      version: 1,
+      onUpgrade: (db, oldVersion, newVersion) {
+        print("数据库需要升级！旧版：$oldVersion,新版：$newVersion");
+        db.execute(
+            'CREATE TABLE rpc(id INTEGER PRIMARY KEY, name TEXT, uri TEXT)'
+        );
+        return;
+      },
+      version: 2,
     );
     return this;
   }

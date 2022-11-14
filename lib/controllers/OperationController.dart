@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:contractop/models/Contract.dart';
 import 'package:contractop/models/Operator.dart';
+import 'package:contractop/models/Rpc.dart';
 import 'package:contractop/service/StorageService.dart';
 import 'package:contractop/utils/helpers.dart';
 import 'package:flutter/material.dart';
@@ -43,18 +44,23 @@ class OperationController extends GetxController with StateMixin {
     color.value = Get.arguments['color'];
 
     ///建立web3
-    String rpc = "";
-    if (c['chain_id'] == 56) {
-      rpc = "https://bsc-dataseed1.binance.org";
-    } else if (c['chain_id'] == 97) {
-      rpc = "https://data-seed-prebsc-1-s1.binance.org:8545";
-    } else if (c['chain_id'] == 1) {
-      rpc = "https://cloudflare-eth.com";
-    } else if (c['chain_id'] == 5) {
-      rpc = 'https://rpc.ankr.com/eth_goerli';
+    var rpcUri = "";
+    var rpc = await Rpc.first(where: "id = ?",whereArgs: [c['chain_id']]);
+    if (rpc != null) {
+      rpcUri = rpc['uri'];
+    } else {
+      return Get.dialog(AlertDialog(
+        title: const Text("Error"),
+        content: Text("未设置 RPC"),
+        actions: [
+          IconButton(
+              onPressed: () => Get.back(),
+              icon: Icon(Icons.close))
+        ],
+      ));
     }
     httpClient = Client();
-    ethereumClient = Web3Client(rpc, httpClient);
+    ethereumClient = Web3Client(rpcUri, httpClient);
 
     ///获取本人凭证
     credentials = EthPrivateKey.fromHex(decrypt(op['secret_key'] as String));

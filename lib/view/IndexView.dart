@@ -101,6 +101,20 @@ class IndexView extends GetView<IndexController> {
                   ),
                 ),
 
+                /// 管理 RPC
+                Padding(
+                  padding: const EdgeInsets.all(defaultPadding),
+                  child: SizedBox(
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.settings),
+                      label: const Text("RPC Setting"),
+                      onPressed: () async {
+                        Get.toNamed("/rpc");
+                      },
+                    ),
+                  ),
+                ),
+
                 /// 列表
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
