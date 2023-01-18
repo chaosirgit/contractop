@@ -21,6 +21,9 @@ class DbService extends GetxService {
         db.execute(
           'CREATE TABLE contract(id INTEGER PRIMARY KEY AUTOINCREMENT,chain_id INTEGER, name TEXT, public_key TEXT, abi TEXT)',
         );
+        db.execute(
+            'CREATE TABLE rpc(id INTEGER PRIMARY KEY, name TEXT, uri TEXT)'
+        );
         return;
       },
       onUpgrade: (db, oldVersion, newVersion) {
